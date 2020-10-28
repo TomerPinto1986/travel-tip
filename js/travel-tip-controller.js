@@ -4,12 +4,12 @@ import { mapService } from './mapService.js'
 
 var gMap;
 
+window.addEventListener('load', onInit)
 
-
-window.onload = () => {
+function onInit() {
     initMap()
         .then(() => {
-
+            addNewPlace(gMap)
             addMarker({ lat: 32.0749831, lng: 34.9120554 });
         })
         .catch(console.log('INIT MAP ERROR'));
@@ -23,12 +23,21 @@ window.onload = () => {
             console.log('err!!!', err);
         })
 }
+document.querySelector('.my-loc-btn').addEventListener('click', (ev) => {
+    getPosition()
+        .then(pos => {
+            const lat = pos.coords.latitude
+            const lng = pos.coords.longitude
+            panTo(lat, lng)
+            addMarker({ lat, lng })
+        })
+})
 
 
-// document.querySelector('.btn').addEventListener('click', (ev) => {
-//     console.log('Aha!', ev.target);
-//     panTo(35.6895, 139.6917);
-// })
+document.querySelector('.btn').addEventListener('click', (ev) => {
+    console.log('Aha!', ev.target);
+    panTo(35.6895, 139.6917);
+})
 
 function initMap(lat = 32.0749831, lng = 34.9120554) {
     console.log('InitMap');
@@ -82,4 +91,30 @@ function _connectGoogleApi() {
         elGoogleApi.onload = resolve;
         elGoogleApi.onerror = () => reject('Google script failed to load')
     })
+}
+
+// document.querySelector('.my-map').addEventListener('click', addNewPlace)
+
+function addNewPlace(map) {
+    var infoWindow = new google.maps.InfoWindow({ content: 'Click the map to get Lat/Lng!', position: map.position });
+    console.log(infoWindow);
+    infoWindow.open(map);
+    map.addListener('click', function(mapsMouseEvent) {
+        infoWindow.close();
+        infoWindow = new google.maps.InfoWindow({ position: mapsMouseEvent.latLng });
+        console.log(mapsMouseEvent.latLng.toString());
+        addToListPlaces(mapsMouseEvent.latLng.toString())
+    });
+}
+
+function addToListPlaces(latLng) {
+    const regex = /\(|,|\)/gi;
+    var latLngNew = latLng.replaceAll(regex, '')
+    latLngNew = latLngNew.split(' ')
+    const lat = latLngNew[0]
+    const lng = latLngNew[1]
+    console.log('lat', lat);
+    console.log('lng', lng);
+    // createPlace(lat, lng)
+    // renderPlaces()
 }
