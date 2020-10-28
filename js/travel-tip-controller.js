@@ -39,10 +39,7 @@ document.querySelector('.my-loc-btn').addEventListener('click', (ev) => {
 })
 
 
-document.querySelector('.btn').addEventListener('click', (ev) => {
-    console.log('Aha!', ev.target);
-    panTo(35.6895, 139.6917);
-})
+
 
 function initMap(lat = 32.0749831, lng = 34.9120554) {
     return _connectGoogleApi()
@@ -137,7 +134,7 @@ function renderLocations(gMyLocations) {
         // })
         strHTMLs += `<ul data-id="${location.id}">
                   <li class="go">${location.name}</li>
-                  <li class="remove"> <button>X</button></li>
+                  <li class="remove"> <button>x</button></li>
                 </ul>`
     })
     elMyLocations.innerHTML = strHTMLs;
