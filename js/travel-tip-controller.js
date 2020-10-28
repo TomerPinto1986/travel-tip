@@ -8,10 +8,10 @@ var gMap;
 
 
 window.addEventListener('load', onInit)
+const elAddressSearchBtn = document.querySelector('.search-btn')
+elAddressSearchBtn.addEventListener('click', () => onSearchLocation())
 
 function onInit() {
-    const elAddressSearchBtn = document.querySelector('.search-btn')
-    elAddressSearchBtn.addEventListener('click', () => onSearchLocation())
     initMap()
         .then(() => {
             var MyLocations = mapService.getLocations();
@@ -115,16 +115,16 @@ function _connectGoogleApi() {
 
 // document.querySelector('.my-map').addEventListener('click', addNewPlace)
 
-function addNewPlace(map, MyLocations) {
+function addNewPlace(map) {
     var infoWindow = new google.maps.InfoWindow({ content: 'Click the map to get Lat/Lng!', position: map.position });
     infoWindow.open(map);
     map.addListener('click', function(mapsMouseEvent) {
         infoWindow.close();
         infoWindow = new google.maps.InfoWindow({ position: mapsMouseEvent.latLng });
         const locationId = mapService.createLocation(mapsMouseEvent.latLng.toString())
-        renderLocations(MyLocations)
-        console.log(MyLocations);
-        putLocationInfo(MyLocations, locationId)
+        renderLocations()
+        const myLocations = mapService.getLocations()
+        putLocationInfo(myLocations, locationId)
     });
 }
 
@@ -135,7 +135,8 @@ function onRemoveLocation(locationId) {
 
 
 
-function renderLocations(MyLocations) {
+function renderLocations() {
+    const MyLocations = mapService.getLocations()
     const elMyLocations = document.querySelector('.my-locations ul')
     var strHTMLs = ''
     MyLocations.forEach(location => {
