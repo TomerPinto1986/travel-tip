@@ -85,11 +85,14 @@ function panTo(lat, lng) {
 
 onSearchLocation();
 
-function onSearchLocation() {
+function onSearchLocation(ev) {
+    ev.preventdefault()
+    const elAddressSearch = document.querySelector('header form input[name=location].value')
     console.log('geo');
-    mapService.getLocationFromGeo()
+    mapService.getLocationFromGeo(elAddressSearch.value)
         .then(res => {
             console.log(res);
+            panTo(res.lat, res.lng)
         })
 }
 
