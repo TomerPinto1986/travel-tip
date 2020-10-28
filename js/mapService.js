@@ -40,7 +40,8 @@ function createLocation(posStr) {
         createdAt: Date.now(),
         // updatedAt
     })
-    saveLocations()
+    saveLocations();
+    return gMyLocations.id;
 }
 
 function getLocationFromGeo(address) {

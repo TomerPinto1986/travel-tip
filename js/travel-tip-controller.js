@@ -4,7 +4,7 @@ import { mapService } from './mapService.js'
 
 
 var gMap;
-var gMyLocations = mapService.getLocations()
+// var gMyLocations = mapService.getLocationIdxById()s()
 
 
 window.addEventListener('load', onInit)
@@ -12,10 +12,10 @@ window.addEventListener('load', onInit)
 function onInit() {
     initMap()
         .then(() => {
-            addNewPlace(gMap)
+            var MyLocations = mapService.getLocationIdxById();
+            addNewPlace(gMap, MyLocations)
             addMarker({ lat: 32.0749831, lng: 34.9120554 });
-            gMyLocations = mapService.getLocations();
-            renderLocations(gMyLocations)
+            renderLocations(MyLocations)
         })
         .catch(console.log('INIT MAP ERROR'));
 
@@ -80,18 +80,14 @@ function panTo(lat, lng) {
     addMarker({ lat: +lat, lng: +lng })
 }
 
-onSearchLocation();
 
-function onSearchLocation(ev) {
-    ev.preventdefault()
-    const elAddressSearch = document.querySelector('header form input[name=location].value')
-    console.log('geo');
-    mapService.getLocationFromGeo(elAddressSearch.value)
-        .then(res => {
-            console.log(res);
-            panTo(res.lat, res.lng)
-        })
-}
+// function onSearchLocation() {
+//     console.log('geo');
+//     mapService.getLocationIdxById() FromGeo()
+//         .then(res => {
+//             console.log(res);
+//         })
+// }
 
 function _connectGoogleApi() {
     if (window.google) return Promise.resolve()
@@ -109,14 +105,16 @@ function _connectGoogleApi() {
 
 // document.querySelector('.my-map').addEventListener('click', addNewPlace)
 
-function addNewPlace(map) {
+function addNewPlace(map, MyLocations) {
     var infoWindow = new google.maps.InfoWindow({ content: 'Click the map to get Lat/Lng!', position: map.position });
     infoWindow.open(map);
     map.addListener('click', function(mapsMouseEvent) {
         infoWindow.close();
         infoWindow = new google.maps.InfoWindow({ position: mapsMouseEvent.latLng });
-        mapService.createLocation(mapsMouseEvent.latLng.toString())
-        renderLocations(gMyLocations)
+        const locationId = mapService.createLocation(mapsMouseEvent.latLng.toString())
+        renderLocations(MyLocations)
+        console.log(MyLocations);
+        putLocationInfo(MyLocations, id)
     });
 }
 
@@ -127,10 +125,10 @@ function onRemoveLocation(locationId) {
 
 
 
-function renderLocations(gMyLocations) {
+function renderLocations(MyLocations) {
     const elMyLocations = document.querySelector('.my-locations ul')
     var strHTMLs = ''
-    gMyLocations.forEach(location => {
+    MyLocations.forEach(location => {
         // _connectGoogleApi()
         //     .then(() => {
         // addMarker({ lat: +location.lat, lng: +location.lng })
@@ -141,15 +139,21 @@ function renderLocations(gMyLocations) {
                 </ul>`
     })
     elMyLocations.innerHTML = strHTMLs;
-    addEventListenerFunc()
+    addEventListenerFunc(MyLocations)
 }
 
-function addEventListenerFunc() {
-    gMyLocations.forEach(location => {
+function addEventListenerFunc(MyLocations) {
+    MyLocations.forEach(location => {
         const elGoLi = document.querySelector(`.my-locations ul[data-id="${location.id}"] .go`)
         const elRemoveBtn = document.querySelector(`.my-locations ul[data-id="${location.id}"] .remove button`)
         elGoLi.addEventListener('click', () => panTo(location.lat, location.lng))
         elRemoveBtn.addEventListener('click', () => onRemoveLocation(location.id))
         addMarker({ lat: +location.lat, lng: +location.lng })
     })
+}
+
+
+function putLocationInfo(MyLocations, id) {
+    const locationIdx = getLocationIdxById(id);
+    document.querySelector('.curr-location').innerText = MyLocations[locationIdx].name;
 }
