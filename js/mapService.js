@@ -43,10 +43,25 @@ function createLocation(posStr) {
     saveLocations()
 }
 
+function createSearchLocation(lat, lng, name) {
+    // if (gMyLocations.findIndex(place => place.name === nameLocation) !== -1) return alert('your place name is used, please change name')
+    gMyLocations.push({
+        id: utils.makeId(),
+        lat,
+        lng,
+        name,
+        createdAt: Date.now(),
+        // updatedAt
+    })
+    saveLocations()
+
+}
+
+
 function getLocationFromGeo(address) {
     console.log(address);
     return axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=AIzaSyBSGjk4rruNgL9EAB1ad7NGqsP9DWd9ZjY`)
-        .then(res => res.data.geometry.location)
+        .then(res => res.data.results[0].geometry.location)
 }
 
 
@@ -78,5 +93,6 @@ export const mapService = {
     getLocations,
     getLocationIdxById,
     removeLocation,
-    getLocationFromGeo
+    getLocationFromGeo,
+    createSearchLocation
 }

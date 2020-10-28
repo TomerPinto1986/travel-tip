@@ -10,6 +10,8 @@ var gMyLocations = mapService.getLocations()
 window.addEventListener('load', onInit)
 
 function onInit() {
+    const elAddressSearchBtn = document.querySelector('.search-btn')
+    elAddressSearchBtn.addEventListener('click', () => onSearchLocation())
     initMap()
         .then(() => {
             addNewPlace(gMap)
@@ -56,7 +58,6 @@ function initMap(lat = 32.0749831, lng = 34.9120554) {
 }
 
 function addMarker(loc) {
-    console.log(loc);
     var marker = new google.maps.Marker({
         position: loc,
         map: gMap,
@@ -80,16 +81,19 @@ function panTo(lat, lng) {
     addMarker({ lat: +lat, lng: +lng })
 }
 
-onSearchLocation();
 
-function onSearchLocation(ev) {
-    ev.preventdefault()
-    const elAddressSearch = document.querySelector('header form input[name=location].value')
+function onSearchLocation() {
+    console.log('hikk');
+    // ev.preventdefault()
+    const elAddressSearch = document.querySelector('input[name=location]')
     console.log('geo');
     mapService.getLocationFromGeo(elAddressSearch.value)
         .then(res => {
             console.log(res);
+            console.log(elAddressSearch.value);
             panTo(res.lat, res.lng)
+            createSearchLocation(res.lat, res.lng, elAddressSearch.value)
+                // renderLocations(mapService.getLocations())
         })
 }
 
@@ -143,6 +147,7 @@ function renderLocations(gMyLocations) {
     elMyLocations.innerHTML = strHTMLs;
     addEventListenerFunc()
 }
+
 
 function addEventListenerFunc() {
     gMyLocations.forEach(location => {
