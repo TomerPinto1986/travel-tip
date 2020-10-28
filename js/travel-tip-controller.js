@@ -10,12 +10,12 @@ var gMyLocations = mapService.getLocations()
 window.addEventListener('load', onInit)
 
 function onInit() {
-    renderLocations(gMyLocations)
-    if (gMyLocations.length > 0) addEventListenerFunc()
     initMap()
         .then(() => {
             addNewPlace(gMap)
             addMarker({ lat: 32.0749831, lng: 34.9120554 });
+            gMyLocations = mapService.getLocations();
+            renderLocations(gMyLocations)
         })
         .catch(console.log('INIT MAP ERROR'));
 
@@ -83,7 +83,15 @@ function panTo(lat, lng) {
     addMarker({ lat: +lat, lng: +lng })
 }
 
+onSearchLocation();
 
+function onSearchLocation() {
+    console.log('geo');
+    mapService.getLocationFromGeo()
+        .then(res => {
+            console.log(res);
+        })
+}
 
 function _connectGoogleApi() {
     if (window.google) return Promise.resolve()
@@ -114,8 +122,10 @@ function addNewPlace(map) {
 
 function onRemoveLocation(locationId) {
     mapService.removeLocation(locationId);
-    renderLocations(gMyLocations)
+    onInit();
 }
+
+
 
 function renderLocations(gMyLocations) {
     const elMyLocations = document.querySelector('.my-locations ul')
@@ -140,5 +150,6 @@ function addEventListenerFunc() {
         const elRemoveBtn = document.querySelector(`.my-locations ul[data-id="${location.id}"] .remove button`)
         elGoLi.addEventListener('click', () => panTo(location.lat, location.lng))
         elRemoveBtn.addEventListener('click', () => onRemoveLocation(location.id))
+        addMarker({ lat: +location.lat, lng: +location.lng })
     })
 }

@@ -43,17 +43,14 @@ function createLocation(posStr) {
     saveLocations()
 }
 
+function getLocationFromGeo() {
+    return axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=AIzaSyBzYXezGfkd8JwXIH2jCI8hetlPh-wNjGg`)
+        .then(res => res.data)
+}
 
 
-// var locs = [{ lat: 11.22, lng: 22.11 }]
 
-// function getLocs() {
-//     return new Promise((resolve, reject) => {
-//         setTimeout(() => {
-//             resolve(locs);
-//         }, 2000)
-//     });
-// }
+
 
 function removeLocation(locationId) {
     const idx = getLocationIdxById(locationId)
@@ -80,4 +77,5 @@ export const mapService = {
     getLocations,
     getLocationIdxById,
     removeLocation,
+    getLocationFromGeo
 }
