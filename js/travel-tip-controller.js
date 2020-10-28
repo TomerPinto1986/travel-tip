@@ -160,6 +160,7 @@ function addEventListenerFunc(MyLocations) {
 
 
 function putLocationInfo(MyLocations, id) {
+    debugger;
     const locationIdx = mapService.getLocationIdxById(id);
     console.log(locationIdx);
     document.querySelector('.curr-location').innerText = MyLocations[locationIdx].name;
