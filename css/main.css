@@ -1,12 +1,62 @@
+@font-face {
+    font-family: nito;
+    src: url(../fonts/Nunito-Regular.ttf);
+}
+
 * {
     box-sizing: border-box;
 }
 
+html {
+    font-family: nito;
+}
+
 body {
     margin: 0;
+    background-color: lightcoral;
+}
+
+li {
+    list-style: none;
+    margin: 0;
+    display: inline;
+}
+
+button {
+    border: none;
+    padding: 6px 12px;
+    border-radius: 10px;
+    font-family: nito;
 }
 
 .my-map {
-    width: 400px;
+    flex-grow: 1;
     height: 400px;
+}
+
+header {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+section.location-info {
+    display: flex;
+    flex-grow: 1;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.container {
+    max-width: 900px;
+}
+
+.main-container {
+    padding-block-start: 10px;
+    display: flex;
+    margin: 0 auto;
+}
+
+.main-container .trip-info {
+    width: 50%;
 }
