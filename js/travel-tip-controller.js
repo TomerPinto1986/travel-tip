@@ -1,3 +1,3 @@
 'use strict';
 
-import { travelTripService } from './travel-trip-service.js'
+import { travelTipService } from './travel-trip-service.js'
