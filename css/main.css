@@ -60,3 +60,8 @@ section.location-info {
 .main-container .trip-info {
     width: 50%;
 }
+
+.my-locations ul {
+    display: flex;
+    padding: 0;
+}

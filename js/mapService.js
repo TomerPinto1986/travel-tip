@@ -40,7 +40,8 @@ function createLocation(posStr) {
         createdAt: Date.now(),
         // updatedAt
     })
-    saveLocations()
+    saveLocations();
+    return gMyLocations[gMyLocations.length - 1].id;
 }
 
 function createSearchLocation(lat, lng, name) {
@@ -53,7 +54,9 @@ function createSearchLocation(lat, lng, name) {
         createdAt: Date.now(),
         // updatedAt
     })
+    console.log(gMyLocations);
     saveLocations()
+    return gMyLocations[gMyLocations.length - 1].id
 
 }
 
@@ -75,10 +78,9 @@ function removeLocation(locationId) {
 }
 
 function getLocationIdxById(locationId) {
+    console.log(locationId);
     return gMyLocations.findIndex(location => {
-        console.log(locationId);
-        console.log(location.id);
-        locationId === location.id
+        return locationId === location.id
     })
 
 }
