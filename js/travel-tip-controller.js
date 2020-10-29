@@ -8,8 +8,8 @@ var gMap;
 
 
 window.addEventListener('load', onInit)
-const elAddressSearchBtn = document.querySelector('.search-btn')
-elAddressSearchBtn.addEventListener('click', () => onSearchLocation())
+const elAddressSearchBtn = document.querySelector('form')
+elAddressSearchBtn.addEventListener('submit', onSearchLocation)
 
 function onInit() {
     initMap()
@@ -82,7 +82,8 @@ function panTo(lat, lng) {
 }
 
 
-function onSearchLocation() {
+function onSearchLocation(ev) {
+    if (ev) ev.preventDefault();
     const MyLocations = mapService.getLocations()
     console.log('hikk');
     // ev.preventdefault()
@@ -115,16 +116,16 @@ function _connectGoogleApi() {
 
 // document.querySelector('.my-map').addEventListener('click', addNewPlace)
 
-function addNewPlace(map) {
+function addNewPlace(map, MyLocations) {
     var infoWindow = new google.maps.InfoWindow({ content: 'Click the map to get Lat/Lng!', position: map.position });
     infoWindow.open(map);
     map.addListener('click', function(mapsMouseEvent) {
         infoWindow.close();
         infoWindow = new google.maps.InfoWindow({ position: mapsMouseEvent.latLng });
         const locationId = mapService.createLocation(mapsMouseEvent.latLng.toString())
-        renderLocations()
-        const myLocations = mapService.getLocations()
-        putLocationInfo(myLocations, locationId)
+        renderLocations(MyLocations)
+        console.log(MyLocations);
+        putLocationInfo(MyLocations, locationId)
     });
 }
 
@@ -135,8 +136,7 @@ function onRemoveLocation(locationId) {
 
 
 
-function renderLocations() {
-    const MyLocations = mapService.getLocations()
+function renderLocations(MyLocations) {
     const elMyLocations = document.querySelector('.my-locations ul')
     var strHTMLs = ''
     MyLocations.forEach(location => {
@@ -161,7 +161,6 @@ function addEventListenerFunc(MyLocations) {
 
 
 function putLocationInfo(MyLocations, id) {
-    debugger;
     const locationIdx = mapService.getLocationIdxById(id);
     console.log(locationIdx);
     document.querySelector('.curr-location').innerText = MyLocations[locationIdx].name;
