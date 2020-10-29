@@ -75,7 +75,7 @@ function getPosition() {
 }
 
 
-function panTo(lat, lng) {
+function panTo(lat, lng, locationId = null) {
     var laLatLng = new google.maps.LatLng(lat, lng);
     gMap.panTo(laLatLng);
     addMarker({ lat: +lat, lng: +lng })
@@ -123,9 +123,8 @@ function addNewPlace(map, MyLocations) {
         infoWindow.close();
         infoWindow = new google.maps.InfoWindow({ position: mapsMouseEvent.latLng });
         const locationId = mapService.createLocation(mapsMouseEvent.latLng.toString())
-        renderLocations(MyLocations)
-        console.log(MyLocations);
-        putLocationInfo(MyLocations, locationId)
+        renderLocations(mapService.getLocations())
+        putLocationInfo(mapService.getLocations(), locationId)
     });
 }
 
@@ -153,15 +152,20 @@ function addEventListenerFunc(MyLocations) {
     MyLocations.forEach(location => {
         const elGoLi = document.querySelector(`.my-locations ul[data-id="${location.id}"] .go`)
         const elRemoveBtn = document.querySelector(`.my-locations ul[data-id="${location.id}"] .remove button`)
-        elGoLi.addEventListener('click', () => panTo(location.lat, location.lng))
+        elGoLi.addEventListener('click', () => clickMap(location.lat, location.lng, location.id))
         elRemoveBtn.addEventListener('click', () => onRemoveLocation(location.id))
         addMarker({ lat: +location.lat, lng: +location.lng })
     })
+}
+
+function clickMap(lat, lng, id) {
+    panTo(lat, lng)
+    putLocationInfo(mapService.getLocations(), id)
 }
 
 
 function putLocationInfo(MyLocations, id) {
     const locationIdx = mapService.getLocationIdxById(id);
     console.log(locationIdx);
-    document.querySelector('.curr-location').innerText = MyLocations[locationIdx].name;
+    document.querySelector('.curr-location span').innerText = MyLocations[locationIdx].name;
 }

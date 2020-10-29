@@ -73,6 +73,7 @@ function getLocationFromGeo(address) {
 
 function removeLocation(locationId) {
     const idx = getLocationIdxById(locationId)
+    document.querySelector('.curr-location span').innerText = '';
     gMyLocations.splice(idx, 1)
     saveLocations()
 }

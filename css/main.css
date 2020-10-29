@@ -51,6 +51,11 @@ section.location-info {
     max-width: 900px;
 }
 
+.curr-location {
+    font-size: 25px;
+    font-weight: 800;
+}
+
 .main-container {
     padding-block-start: 10px;
     display: flex;
