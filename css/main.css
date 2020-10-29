@@ -68,5 +68,10 @@ section.location-info {
 
 .my-locations ul {
     display: flex;
-    padding: 0;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.my-locations ul ul {
+    display: inline-block;
 }
